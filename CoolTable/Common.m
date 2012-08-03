@@ -41,7 +41,7 @@ void draw1PxStroke(CGContextRef context, CGPoint startPoint, CGPoint endPoint, i
     
     CGContextSaveGState(context);
     CGContextSetLineCap(context, kCGLineCapSquare);
-    CGContextSetStrokeColorWithColor(context, SEPARATOR_COLOR);
+    CGContextSetStrokeColorWithColor(context, (__bridge CGColorRef)(color));
     CGContextSetLineWidth(context, 1.0);
     CGContextMoveToPoint(context, startPoint.x + 0.5, startPoint.y + 0.5);
     CGContextAddLineToPoint(context, endPoint.x + 0.5, endPoint.y + 0.5);
@@ -58,5 +58,26 @@ void drawGlossAndGradient(CGContextRef context, CGRect rect, NSArray *startAndEn
     
 
     drawLinearGradient(context, topHalf, [NSArray arrayWithObjects:(id)GLOSS_COLOR_1, (id)GLOSS_COLOR_2, nil]);
+    
+}
+
+CGMutablePathRef createArcPathFromBottomOfRect(CGRect rect, CGFloat arcHeight) {
+    
+    CGRect arcRect = CGRectMake(rect.origin.x, rect.origin.y + rect.size.height - arcHeight,
+                                rect.size.width, arcHeight);
+    
+    CGFloat arcRadius = (arcRect.size.height/2) + (pow(arcRect.size.width, 2) / (8*arcRect.size.height));
+    CGPoint arcCenter = CGPointMake(arcRect.origin.x + arcRect.size.width/2, arcRect.origin.y + arcRadius);
+    
+    CGFloat angle = acos(arcRect.size.width / (2*arcRadius));
+    CGFloat startAngle = radians(180) + angle;
+    CGFloat endAngle = radians(360) - angle;
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathAddArc(path, NULL, arcCenter.x, arcCenter.y, arcRadius, startAngle, endAngle, 0);
+    CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(rect), CGRectGetMinY(rect));
+    CGPathAddLineToPoint(path, NULL, CGRectGetMinX(rect), CGRectGetMinY(rect));
+    CGPathAddLineToPoint(path, NULL, CGRectGetMinX(rect), CGRectGetMaxY(rect));
+    return path;
     
 }
