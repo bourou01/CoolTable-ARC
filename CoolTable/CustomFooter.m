@@ -10,7 +10,6 @@
 #import "Common.h"
 
 #define WHITE_COLOR [[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1.0] CGColor]
-
 #define LIGHT_GRAY_COLOR_ [[UIColor colorWithRed:230.0/255.0 green:230.0/255.0 blue:230.0/255.0 alpha:1.0] CGColor]
 
 #define DARK_GRAY_COLOR [[UIColor colorWithRed:187.0/255.0 green:187.0/255.0 blue:187.0/255.0 alpha:1.0] CGColor]
